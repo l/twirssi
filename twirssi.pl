@@ -5,6 +5,7 @@ use HTTP::Date;
 use HTML::Entities;
 use File::Temp;
 use LWP::Simple;
+use Encode qw(resolve_alias decode);
 use Data::Dumper;
 $Data::Dumper::Indent = 1;
 
@@ -1280,9 +1281,12 @@ sub update_away {
 sub too_long {
     my $data    = shift;
     my $noalert = shift;
+    my $enc = Irssi::settings_get_str('term_charset');
+    $enc = resolve_alias($enc);
+    my $length = length(decode($enc, $data));
 
-    if ( length $data > 140 ) {
-        &notice( "Tweet too long (" . length($data) . " characters) - aborted" )
+    if ( $length > 140 ) {
+        &notice( "Tweet too long (" . $length . " characters) - aborted" )
           unless $noalert;
         return 1;
     }
