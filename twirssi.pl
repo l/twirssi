@@ -1332,22 +1332,14 @@ sub too_long {
     my $length = 0;
     if (defined $INC{'Encode.pm'}) {
 	    my $enc = Irssi::settings_get_str('term_charset');
-	    Irssi::print($enc);
 	    $enc = resolve_alias($enc);
-	    Irssi::print($enc);
-	    #$data = Encode::is_utf8($data) ? $data : decode_utf8($data);
 	    if (utf8::is_utf8($data) ) {
-	    	Irssi::print 'UTF-8 Flag';
 		utf8::encode($data);
-	    } else {
-	    	Irssi::print 'not UTF-8 Flag';
 	    }
-	    Irssi::print(decode($enc, $data));
 	    $length = length(decode($enc, $data));
     } else {
 	    $length = length($data);
     }
-	    	Irssi::print $length;
 
     if ( $length > 140 ) {
         &notice( "Tweet too long (" . $length . " characters) - aborted" )
