@@ -165,6 +165,7 @@ sub cmd_retweet_as {
         return;
     }
 
+    $data = utf8::is_utf8($data) ? Encode::encode("utf8", $data) : $data;
 # Irssi::settings_add_str( "twirssi", "twirssi_retweet_format", 'RT $n: $t ${-- $c$}' );
     my $text = Irssi::settings_get_str("twirssi_retweet_format");
     $text =~ s/\$n/\@$nick/g;
@@ -174,7 +175,9 @@ sub cmd_retweet_as {
     } else {
         $text =~ s/\${.*?\$}//;
     }
-    $text =~ s/\$t/$id_map{__tweets}{ lc $nick }[$id]/;
+    my $tmp = $id_map{__tweets}{ lc $nick }[$id];
+    $tmp = utf8::is_utf8($tmp) ? Encode::encode("utf8", $tmp) : $tmp;
+    $text =~ s/\$t/$tmp/;
 
     my $modified = $data;
     $data = &shorten($text);
@@ -1608,6 +1611,7 @@ sub hilight {
 sub shorten {
     my $data = shift;
 
+    $data = utf8::is_utf8($data) ? Encode::encode("utf8", $data) : $data;
     my $provider = Irssi::settings_get_str("short_url_provider");
     if (
         (
