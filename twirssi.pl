@@ -1623,7 +1623,7 @@ sub too_long {
     my $length = 0;
     if (defined $INC{'Encode.pm'}) {
 	    my $enc = Irssi::settings_get_str('term_charset');
-	    $enc = resolve_alias($enc);
+	    $enc = Encode::resolve_alias($enc);
 	    if (utf8::is_utf8($data) ) {
 		utf8::encode($data);
 	    }
